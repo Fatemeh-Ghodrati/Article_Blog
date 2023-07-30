@@ -17,14 +17,12 @@ media
 
 ### Django.Python Stack ###
 # Byte-compiled / optimized / DLL files
-*.py[cod]
 *$py.class
 
 # C extensions
 *.so
 
 # Distribution / packaging
-.Python
 build/
 develop-eggs/
 dist/
@@ -63,7 +61,6 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-*.py,cover
 .hypothesis/
 .pytest_cache/
 cover/
