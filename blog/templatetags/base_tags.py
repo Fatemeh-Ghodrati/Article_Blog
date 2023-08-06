@@ -7,7 +7,7 @@ register = template.Library()
 def title():
     return "وبلاگ جنگو"
 
-@register.inclusion_tag("blog/partials/category_navbar.html")
+@register.inclusion_tag("../templates/blog/partials/category_navbar.html")
 def category_navbar():
     return {
         "category": Category.objects.filter(status=True)

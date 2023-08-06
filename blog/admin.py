@@ -49,14 +49,14 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'thumbnail_tag', 'slug', 'jpublish', 'status', 'category_to_str')
-    list_filter = ('publish', 'status')
+    list_display = ('title', 'thumbnail_tag','author', 'slug', 'jpublish', 'status', 'category_to_str')
+    list_filter = ('publish', 'status', 'author')
     search_fields = ('title', 'description')
     prepopulated_fields = {'slug': ('title',)}
     actions = [make_published, make_draft]
 
     def category_to_str(self, obj):
-        return "، ".join([category.title for category in obj.category_published()])
+        return "، ".join([category.title for category in obj.category.active()])
     category_to_str.short_description = "عنوان دسته بندی"
 
 admin.site.register(Article, ArticleAdmin)
