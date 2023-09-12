@@ -12,18 +12,20 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 LOGIN_REDIRECT_URL = "account:home"
-LOGIN_URL = "account:login"
+LOGIN_URL = "login"
+LOGOUT_REDIRECT_URL = "login"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6f(zl-%6y2a#95e$x*(#qf%r4uq*!q38a46)i7av1ws)_t4pw4'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,7 +45,13 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'account.apps.AccountConfig',
     'extensions',
-    'widget_tweaks'
+    'widget_tweaks',
+    'crispy_forms',
+    "crispy_bootstrap4",
+    'comment',
+    'jquery',
+    'django_gravatar',
+    'star_ratings'
 ]
 
 MIDDLEWARE = [
@@ -54,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'blog.middleware.SaveIPAddressMiddleware',
 ]
 
 ROOT_URLCONF = 'myproj.urls'
@@ -133,3 +142,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+AUTH_USER_MODEL = 'account.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_USE_TLS = True
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')

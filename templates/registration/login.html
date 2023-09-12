@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Login V2</title>
+	<title>ورود</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -76,6 +76,10 @@
 						{% endif %}
 						<span class="focus-input100 myfont" data-placeholder="گذرواژه"></span>
 					</div>
+
+					<a class="myfont" href="{% url 'password_reset' %}">فراموشی گذرواژه</a>
+					<br>
+					<a class="myfont" href="{% url 'register' %}">اگر حساب کاربری ندارید ثبت نام کنید</a>
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">

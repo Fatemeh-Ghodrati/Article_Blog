@@ -1,0 +1,5 @@
+{% autoescape off %}
+سلام ,
+برای تایید ثبت نام روی لینک کلیک کنید
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+{% endautoescape %}

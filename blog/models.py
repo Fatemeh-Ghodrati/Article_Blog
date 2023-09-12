@@ -1,8 +1,11 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from extensions.utils import jalali_convertor
 from django.utils.html import format_html
-from django.contrib.auth.models import User
+from account.models import User
+from django.contrib.contenttypes.fields import GenericRelation
+from comment.models import Comment
 
 
 # my manager
@@ -32,10 +35,14 @@ class Category(models.Model):
     
     objects = CategoryManager()
 
+
+class IPAddress(models.Model):
+    ip_address = models.GenericIPAddressField(verbose_name="آدرس آی پی")
+
 class Article(models.Model):
     STATUS_CHOICES = (
-        ('d', 'Draft'),
-        ('p', 'Published'),
+        ('d', 'پیش نویس'),
+        ('p', 'منتشر شده'),
     )
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="articles", verbose_name="نویسنده")
     title = models.CharField(max_length=200, verbose_name= "عنوان مقاله")
@@ -47,6 +54,9 @@ class Article(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name="وضعیت")
+    is_special = models.BooleanField(default=False, verbose_name="مقاله ویژه")
+    comments = GenericRelation(Comment)
+    hits = models.ManyToManyField(IPAddress, through="ArticleHit", blank=True, related_name="hits", verbose_name="بازدید ها")
 
     class Meta:
         verbose_name = "مقاله"
@@ -56,6 +66,9 @@ class Article(models.Model):
     def __str__(self):
         return self.title
     
+    def get_absolute_url(self):
+        return reverse("account:home")
+    
     def jpublish(self):
         return jalali_convertor(self.publish)
     jpublish.short_description = "زمان انتشار"
@@ -63,5 +76,15 @@ class Article(models.Model):
     def thumbnail_tag(self):
         return format_html("<img width=100 height=90 style='border-radius: 20px' src='{}'>".format(self.thumbnail.url))
     thumbnail_tag.short_description = "عکس مقاله"
+
+    def category_to_str(self):
+        return "، ".join([category.title for category in self.category.active()])
+    category_to_str.short_description = "عنوان دسته بندی"
     
     objects = ArticleManager()
+
+
+class ArticleHit(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    ip_address = models.ForeignKey(IPAddress, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)

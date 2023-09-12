@@ -11,4 +11,8 @@
             {% endif %}
         {% endfor %}
     </ul>
+    <form class="form-inline mt-3" action="{% url 'blog:search' %}">
+        <input type="text" name="q" class="form-control" placeholder="جست و جوی متن">
+        <button class="btn btn-success" style="padding: 3px; border-radius: 2px; margin-right: 5px;">جست و جو</button>
+    </form>
 </div>

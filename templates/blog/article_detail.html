@@ -1,4 +1,9 @@
 {% extends 'blog/base.html' %}
+{% load comment_tags %}
+{% load ratings %}
+{% load base_tags %}
+{% include_bootstrap %}
+{{ STATIC_URL }}js/jquery.js
 {% block title %}| {{article.title}} {% endblock %}
 {% block main %}
     <!-- Page Header-->
@@ -8,6 +13,12 @@
                 <div class="col-md-10 col-lg-8 col-xl-7">
                     <div class="site-heading">
                         <h1>{{article.title}}</h1>
+                        {% if article.is_special %}
+                            <span class="badge badge-danger" style="font-size:16px">مقاله ویژه</span>
+                        {% endif %}
+                        <time>{{article.jpublish}}</time>
+                        <div>{% ratings object %}</div>
+                        <div>{{object.hits.count}}</div>
                     </div>
                 </div>
             </div>
@@ -18,8 +29,23 @@
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
+                        <aside>
+                            {% popular_articles %}
+                            {% hot_articles %}
+                        </aside>
                         <p>
-                            {{article.description}}
+                            {% if object.is_special %}
+                                {% if user.is_authenticated and user.is_special_user or user == object.author or user.is_superuser %}
+                                    {{object.description|safe}}
+                                {% else %}
+                                    {{object.description|truncatewords:10}}
+                                    <p class="alert alert-warning">برای مشاهده مقاله اشتراک ویژه خریداری کنید </p>
+                                {% endif %}
+                            {% else %}
+                                {{object.description|safe}}
+                            {% endif %}
+
+                            {% render_comments object request %}
                         </p>
                     </div>
                 </div>

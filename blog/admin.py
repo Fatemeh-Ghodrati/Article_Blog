@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Article, Category
+from .models import Article, Category, IPAddress
 
 # Register your models here.
 def make_published(modelAdmin, request, queryset):
@@ -49,7 +49,7 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'thumbnail_tag','author', 'slug', 'jpublish', 'status', 'category_to_str')
+    list_display = ('title', 'thumbnail_tag','author', 'slug', 'jpublish', 'status', 'is_special', 'category_to_str')
     list_filter = ('publish', 'status', 'author')
     search_fields = ('title', 'description')
     prepopulated_fields = {'slug': ('title',)}
@@ -60,3 +60,4 @@ class ArticleAdmin(admin.ModelAdmin):
     category_to_str.short_description = "عنوان دسته بندی"
 
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(IPAddress)

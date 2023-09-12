@@ -95,3 +95,14 @@ a.navbar-brand {
 .nav ul > li > ul > li > ul > li:hover > ul {
     display: block !important;
 }
+
+.popular_articles {
+    border: 1px solid #bfbfbf;
+    padding:15px;
+    border-radius: 5px;
+    width: 240px;
+    position: absolute;
+    left: -240px;
+    top: 200px;
+    box-shadow: -5px 5px #d5d5d5;
+}
